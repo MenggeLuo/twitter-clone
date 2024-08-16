@@ -7,7 +7,7 @@ export const signup = async (req, res) => {
     try {
         const { fullname, username, email, password } = req.body;
 
-        const emailRegex = /\S+@\S+\.\S+/;
+        const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
         if (!emailRegex.test(email)) {
             return res.status(400).json({
                 error: "Invalid email",
@@ -33,6 +33,7 @@ export const signup = async (req, res) => {
         // hash password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
+        console.log("Hashed password:", hashedPassword);
         const newUser = new User({
             fullname,
             username,
